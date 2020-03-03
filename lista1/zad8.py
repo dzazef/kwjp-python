@@ -17,7 +17,8 @@ class RzymToArab:
         value = self.rzym_arab[s[0]]
         for i in range(1, len(s)):
             if self.rzym_arab[s[i]] > self.rzym_arab[s[i - 1]]:
-                value += self.rzym_arab[s[i]] - 2 * self.rzym_arab[s[i - 1]]
+                value -= self.rzym_arab[s[i - 1]]
+                value += self.rzym_arab[s[i]] - self.rzym_arab[s[i - 1]]
             else:
                 value += self.rzym_arab[s[i]]
         return value
