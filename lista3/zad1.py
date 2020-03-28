@@ -1,3 +1,5 @@
+
+
 def transpose_matrix(matrix):
     """Returns transponse of given matrix"""
     return [' '.join([row[i] for row in [x.split(' ') for x in matrix]])

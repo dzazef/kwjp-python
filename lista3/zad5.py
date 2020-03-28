@@ -1,3 +1,5 @@
+
+
 def powerset(set_):
     """Powerset using map and lambda"""
     return (powerset(set_[1:]) +

@@ -1,3 +1,5 @@
+
+
 def flatten(list_):
     """Generator for flattening a list"""
     for elem in list_:
