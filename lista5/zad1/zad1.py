@@ -1,7 +1,6 @@
 import pandas as pd
 import numpy as np
 from matplotlib import pyplot as plt
-from sklearn.linear_model import LinearRegression
 
 
 # noinspection PyMethodMayBeStatic
@@ -20,7 +19,8 @@ class RatingFinder:
         usr = d0[d0.movieId == 1][['userId']].to_numpy().ravel()
         self.usr = len(usr)
         d1 = d0[d0['userId'].isin(usr)]
-        d1.insert(0, 'userIdNew', d1.userId.replace(usr, np.arange(self.usr)))
+        d1.insert(0, 'userIdNew',
+                  d1.userId.replace(usr, np.arange(self.usr)))
         self.data = (d1[['userIdNew', 'movieId', 'rating']].to_numpy())
 
     def _fill_matrices(self, n, m):
@@ -40,7 +40,8 @@ class RatingFinder:
     def predict(self, row, x, exact=False) -> float:
         """Predict ranking of Toy Story movie base on other movies"""
         pred = np.dot(row, x)
-        return pred if not exact else round(pred * 2) / 2
+        return (pred if not exact
+                else max(0.0, min(5.0, round(pred * 2) / 2)))
 
     def error(self, row, x, real, exact=False) -> float:
         """Calculates error of ranking prediction"""
@@ -66,7 +67,7 @@ class RatingFinder:
 
     def draw_plots_err(self, users, errors, m, zad):
         """Draw plot for error"""
-        plt.plot(users, errors, label='Error')
+        plt.scatter(users, errors, label='Error')
         plt.title(f'Error of prediction for m = {m}')
         plt.legend()
         plt.savefig(fname=f'{zad}_{m}_err')
@@ -87,9 +88,10 @@ class RatingFinder:
             a_215, b_215 = self._fill_matrices(self.usr, m)
             users = np.arange(self.usr - 200)
             real = [b_215[uid + 200] for uid in users]
-            pred = [self.predict(a_215[uid + 200], x) for uid in users]
-            errors = [self.error(a_215[uid + 200], x, b_215[uid + 200])
-                      for uid in users]
+            pred = [self.predict(a_215[uid + 200], x, exact=True)
+                    for uid in users]
+            errors = [self.error(a_215[uid + 200], x, b_215[uid + 200],
+                                 exact=True) for uid in users]
             self.draw_plot_pred(users, real, pred, m, zad='z1b')
             self.draw_plots_err(users, errors, m, zad='z1b')
 
