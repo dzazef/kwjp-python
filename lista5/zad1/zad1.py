@@ -3,9 +3,6 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 
-# noinspection PyMethodMayBeStatic
-
-
 class RatingFinder:
 
     def __init__(self, path):

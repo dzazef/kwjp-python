@@ -28,6 +28,7 @@ class Recommendation:
         self.m = int(max(self.ratings[:, 1]))  # uid of last movie
 
     def _fill_matrices(self):
+        """Fill matrices with data"""
         a = np.zeros(shape=(self.n, self.m))
         for row in self.ratings:
             uid = int(row[0])
@@ -36,15 +37,18 @@ class Recommendation:
         self.a0 = a
 
     def get_title(self, mid):
+        """Get title by movieId"""
         t = self.movies[self.movies[:, 0] == mid]
         return t[0][1] if len(t) > 0 else "<no_title>"
 
     def _norm_matrix(self):
+        """Calculate normal matrix"""
         norm = np.linalg.norm(self.a0, axis=0)
         norm = [x if x != 0.0 else 1.0 for x in norm]
         self.a1 = self.a0 / norm
 
     def _res_to_data_frame(self, p_np):
+        """Result to DataFrame"""
         p_pd = pd.DataFrame(dict(
             mid=np.arange(len(p_np)).ravel(),
             pred=p_np.ravel()
@@ -55,6 +59,7 @@ class Recommendation:
         return p_pd
 
     def get_predictions(self, ratings):
+        """Calculate predictions"""
         norm = np.linalg.norm(ratings)
         if norm == 0.0:  # if ratings are empty, predictions are empty
             return pd.DataFrame(dict(mid=[], pred=[], title=[]))
